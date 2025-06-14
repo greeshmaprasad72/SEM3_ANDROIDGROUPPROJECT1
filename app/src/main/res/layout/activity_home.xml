@@ -42,8 +42,6 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-
-    <!-- Brand Header -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/brand_header"
         android:layout_width="0dp"
