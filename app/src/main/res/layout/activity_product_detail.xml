@@ -212,13 +212,14 @@
             android:textSize="16sp"
             android:textStyle="bold"
             android:textColor="#FFFFFF"
-            android:b="@drawable/button_black_rounded"
+            android:background="@drawable/button_black_rounded"
             android:fontFamily="sans-serif-medium"
             android:elevation="2dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/size_s" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
