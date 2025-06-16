@@ -7,7 +7,6 @@
     android:background="@color/white"
     android:padding="16dp">
 
-    <!-- Title Header -->
     <TextView
         android:id="@+id/tv_register_title"
         android:layout_width="wrap_content"
@@ -50,7 +49,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="24dp" />
 
-    <!-- Email Field -->
     <EditText
         android:id="@+id/et_email"
         android:layout_width="0dp"
@@ -66,7 +64,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="16dp" />
 
-    <!-- Password Field -->
     <EditText
         android:id="@+id/et_password"
         android:layout_width="0dp"
@@ -82,7 +79,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="16dp" />
 
-    <!-- Confirm Password Field -->
     <EditText
         android:id="@+id/et_confirm_password"
         android:layout_width="0dp"
@@ -98,7 +94,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="16dp" />
 
-    <!-- Register Button -->
+
     <androidx.cardview.widget.CardView
         android:id="@+id/btn_register"
         android:layout_width="0dp"
@@ -124,7 +120,7 @@
             android:textStyle="bold" />
     </androidx.cardview.widget.CardView>
 
-    <!-- Already have account -->
+
     <TextView
         android:id="@+id/tv_already_login"
         android:layout_width="wrap_content"
