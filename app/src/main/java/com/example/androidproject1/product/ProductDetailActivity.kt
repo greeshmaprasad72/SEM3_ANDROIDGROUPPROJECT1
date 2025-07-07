@@ -1,5 +1,6 @@
 package com.example.androidproject1.product
 
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
@@ -16,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.androidproject1.R
 import com.example.androidproject1.adapter.SizeAdapter
+import com.example.androidproject1.cart.CartActivity
 import com.example.androidproject1.model.Product
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -34,7 +36,6 @@ class ProductDetailActivity : AppCompatActivity() {
     private lateinit var tvColorLabel: TextView
     private lateinit var colorOption1: ImageView
     private lateinit var tvSizeLabel: TextView
-    private lateinit var tvSizeChart: TextView
     private lateinit var rvSizes: RecyclerView
     private lateinit var tvQuantityLabel: TextView
     private lateinit var btnQuantityMinus: ImageView
@@ -86,7 +87,6 @@ class ProductDetailActivity : AppCompatActivity() {
         tvColorLabel = findViewById(R.id.tv_color_label)
         colorOption1 = findViewById(R.id.color_option_1)
         tvSizeLabel = findViewById(R.id.tv_size_label)
-        tvSizeChart = findViewById(R.id.tv_size_chart)
         rvSizes = findViewById(R.id.rv_sizes)
         tvQuantityLabel = findViewById(R.id.tv_quantity_label)
         btnQuantityMinus = findViewById(R.id.btn_quantity_minus)
@@ -119,10 +119,7 @@ class ProductDetailActivity : AppCompatActivity() {
             updateQuantityDisplay()
         }
 
-        tvSizeChart.setOnClickListener {
-            // Show size chart dialog or navigate to size chart activity
-            Toast.makeText(this, "Size Chart clicked", Toast.LENGTH_SHORT).show()
-        }
+
 
         btnAddToCart.setOnClickListener {
             addToCart()
@@ -139,17 +136,39 @@ class ProductDetailActivity : AppCompatActivity() {
         if (selectedSize.isEmpty()) {
             Toast.makeText(this, "Please select a size", Toast.LENGTH_SHORT).show()
             return
+        }else{
+            currentProduct?.let { product ->
+                val database = FirebaseDatabase.getInstance()
+                val cartRef = database.getReference("cart").push()
+
+                val cartItem = hashMapOf(
+                    "productId" to productId,
+                    "productName" to product.name,
+                    "categoryName" to categoryName,
+                    "size" to selectedSize,
+                    "quantity" to quantity,
+                    "price" to product.price,
+                    "totalPrice" to (product.price * quantity),
+                    "imageUrl" to product.image,
+                    "timestamp" to System.currentTimeMillis()
+                )
+
+                cartRef.setValue(cartItem)
+                    .addOnSuccessListener {
+                       val intent=Intent(this@ProductDetailActivity,CartActivity::class.java)
+                        startActivity(intent)
+                    }
+                    .addOnFailureListener { error ->
+                        Toast.makeText(
+                            this,
+                            "Failed to add product to cart: ${error.message}",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+            }
         }
 
-        currentProduct?.let { product ->
-            // Here you would typically add the product to cart
-            // For now, we'll just show a success message
-            Toast.makeText(
-                this,
-                "Added ${product.name} (Size: $selectedSize, Qty: $quantity) to cart",
-                Toast.LENGTH_SHORT
-            ).show()
-        }
+
     }
 
     private fun getProductData() {
@@ -253,7 +272,7 @@ class ProductDetailActivity : AppCompatActivity() {
                     .error(R.drawable.dewss)
                     .into(imgProduct)
             } catch (e: Exception) {
-                // If there's an error with the Firebase storage URL, try loading directly
+
                 Glide.with(this)
                     .load(imageUrl)
                     .placeholder(R.drawable.dewss)

@@ -1,6 +1,7 @@
 package com.example.androidproject1.product
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.ProgressBar
 import android.widget.TextView
@@ -41,23 +42,28 @@ class ProductActivity : AppCompatActivity() {
     }
 
     private fun initializeRecyclerView(categoryName:String) {
-        progressBar.visibility = View.VISIBLE
-        recyclerView.visibility = View.GONE
-        val query = FirebaseDatabase.getInstance()
-            .getReference("categories")
-            .child(categoryName)
-            .child("products")
+        try{
+            progressBar.visibility = View.VISIBLE
+            recyclerView.visibility = View.GONE
+            val query = FirebaseDatabase.getInstance()
+                .getReference("categories")
+                .child(categoryName)
+                .child("products")
 
-        val options = FirebaseRecyclerOptions.Builder<Product>()
-            .setQuery(query, Product::class.java)
-            .build()
-        adapter = ProductAdapter(options,categoryName)
+            val options = FirebaseRecyclerOptions.Builder<Product>()
+                .setQuery(query, Product::class.java)
+                .build()
+            adapter = ProductAdapter(options,categoryName)
 
-        recyclerView.layoutManager = GridLayoutManager(this,2)
-        recyclerView.adapter = adapter
+            recyclerView.layoutManager = GridLayoutManager(this,2)
+            recyclerView.adapter = adapter
 
-        progressBar.visibility = View.GONE
-        recyclerView.visibility = View.VISIBLE
+            progressBar.visibility = View.GONE
+            recyclerView.visibility = View.VISIBLE
+        }catch (e:Exception){
+            Log.d("TAG", "initializeRecyclerView: $e")
+        }
+
     }
 
     override fun onStart() {
