@@ -5,8 +5,19 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.androidproject1.adapter.CategoryAdapter
+import com.example.androidproject1.model.Category
+import com.firebase.ui.database.FirebaseRecyclerOptions
+import com.google.firebase.Firebase
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.database
 
 class HomeActivity : AppCompatActivity() {
+    private var adapter:CategoryAdapter?=null
+    private lateinit var recyclerView:RecyclerView
+    private lateinit var database:FirebaseDatabase
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -16,5 +27,31 @@ class HomeActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+        database=Firebase.database
+        initializeRecyclerView()
+    }
+
+    private fun initializeRecyclerView(){
+        recyclerView=findViewById(R.id.categories_recycler_view)
+        val query = database.reference.child("categories")
+
+        val options = FirebaseRecyclerOptions.Builder<Category>()
+            .setQuery(query, Category::class.java)
+            .build()
+
+        adapter=CategoryAdapter(options)
+
+        recyclerView.layoutManager=LinearLayoutManager(this)
+        recyclerView.adapter=adapter
+    }
+
+    override fun onStart() {
+        super.onStart()
+        adapter?.startListening()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        adapter?.stopListening()
     }
 }
