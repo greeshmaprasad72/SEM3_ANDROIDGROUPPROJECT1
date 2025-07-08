@@ -19,6 +19,7 @@ import com.example.androidproject1.R
 import com.example.androidproject1.adapter.SizeAdapter
 import com.example.androidproject1.cart.CartActivity
 import com.example.androidproject1.model.Product
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -52,6 +53,7 @@ class ProductDetailActivity : AppCompatActivity() {
     private var selectedSize: String = ""
     private var quantity: Int = 1
     private var basePrice: Int = 0
+    private lateinit var auth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,6 +64,7 @@ class ProductDetailActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+        auth = FirebaseAuth.getInstance()
 
         initView()
         getIntentData()
@@ -132,43 +135,101 @@ class ProductDetailActivity : AppCompatActivity() {
         tvTotalPrice.text = "Total: $${String.format("%.2f", totalPrice.toDouble())}"
     }
 
-    private fun addToCart() {
-        if (selectedSize.isEmpty()) {
-            Toast.makeText(this, "Please select a size", Toast.LENGTH_SHORT).show()
-            return
-        }else{
-            currentProduct?.let { product ->
-                val database = FirebaseDatabase.getInstance()
-                val cartRef = database.getReference("cart").push()
+    private fun addToCart(){
+        val currentUser = auth.currentUser
+        currentProduct?.let { product ->
+            val userId = currentUser?.uid?:""
 
-                val cartItem = hashMapOf(
-                    "productId" to productId,
-                    "productName" to product.name,
-                    "categoryName" to categoryName,
-                    "size" to selectedSize,
-                    "quantity" to quantity,
-                    "price" to product.price,
-                    "totalPrice" to (product.price * quantity),
-                    "imageUrl" to product.image,
-                    "timestamp" to System.currentTimeMillis()
-                )
 
-                cartRef.setValue(cartItem)
-                    .addOnSuccessListener {
-                       val intent=Intent(this@ProductDetailActivity,CartActivity::class.java)
-                        startActivity(intent)
-                    }
-                    .addOnFailureListener { error ->
-                        Toast.makeText(
-                            this,
-                            "Failed to add product to cart: ${error.message}",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
-            }
+
+            checkExistingCartItem(userId, product)
         }
+    }
 
+    private fun checkExistingCartItem(userId: String, product: Product) {
+        val database = FirebaseDatabase.getInstance()
+        val cartRef = database.getReference("cart").child(userId)
 
+        cartRef.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                var itemExists = false
+                var existingItemKey: String? = null
+                var existingQuantity = 0
+
+                for (itemSnapshot in snapshot.children) {
+                    val existingProductId = itemSnapshot.child("productId").getValue(Int::class.java)
+                    val existingSize = itemSnapshot.child("size").getValue(String::class.java)
+
+                    if (existingProductId == productId && existingSize == selectedSize) {
+                        itemExists = true
+                        existingItemKey = itemSnapshot.key
+                        existingQuantity = itemSnapshot.child("quantity").getValue(Int::class.java) ?: 0
+                        break
+                    }
+                }
+
+                if (itemExists && existingItemKey != null) {
+                    // Update existing item quantity
+                    updateExistingCartItem(userId, existingItemKey, existingQuantity + quantity, product)
+                } else {
+                    // Add new item to cart
+                    addNewCartItem(userId, product)
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Toast.makeText(this@ProductDetailActivity, "Error checking cart: ${error.message}", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
+    private fun updateExistingCartItem(userId: String, itemKey: String, newQuantity: Int, product: Product) {
+        val database = FirebaseDatabase.getInstance()
+        val itemRef = database.getReference("cart").child(userId).child(itemKey)
+
+        val updates = hashMapOf<String, Any>(
+            "quantity" to newQuantity,
+            "totalPrice" to (product.price * newQuantity),
+            "timestamp" to System.currentTimeMillis()
+        )
+
+        itemRef.updateChildren(updates)
+            .addOnSuccessListener {
+                Toast.makeText(this, "Cart updated successfully", Toast.LENGTH_SHORT).show()
+                val intent = Intent(this@ProductDetailActivity, CartActivity::class.java)
+                startActivity(intent)
+            }
+            .addOnFailureListener { error ->
+                Toast.makeText(this, "Failed to update cart: ${error.message}", Toast.LENGTH_SHORT).show()
+            }
+    }
+
+    private fun addNewCartItem(userId: String, product: Product) {
+        val database = FirebaseDatabase.getInstance()
+        val cartRef = database.getReference("cart").child(userId).push()
+
+        val cartItem = hashMapOf(
+            "productId" to productId,
+            "productName" to product.name,
+            "categoryName" to categoryName,
+            "size" to selectedSize,
+            "quantity" to quantity,
+            "price" to product.price,
+            "totalPrice" to (product.price * quantity),
+            "imageUrl" to product.image,
+            "color" to product.color,
+            "timestamp" to System.currentTimeMillis()
+        )
+
+        cartRef.setValue(cartItem)
+            .addOnSuccessListener {
+                Toast.makeText(this, "Added to cart successfully", Toast.LENGTH_SHORT).show()
+                val intent = Intent(this@ProductDetailActivity, CartActivity::class.java)
+                startActivity(intent)
+            }
+            .addOnFailureListener { error ->
+                Toast.makeText(this, "Failed to add product to cart: ${error.message}", Toast.LENGTH_SHORT).show()
+            }
     }
 
     private fun getProductData() {
