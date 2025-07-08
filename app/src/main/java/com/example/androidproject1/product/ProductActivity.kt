@@ -21,6 +21,7 @@ class ProductActivity : AppCompatActivity() {
     private lateinit var recyclerView:RecyclerView
     private var adapter:ProductAdapter?=null
     private lateinit var  progressBar:ProgressBar
+    private lateinit var categoryText:TextView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -31,12 +32,11 @@ class ProductActivity : AppCompatActivity() {
             insets
         }
 
-        val categoryName=intent.getStringExtra("CATEGORY_NAME") ?:""
+
         recyclerView=findViewById(R.id.rv_product)
-        val categoryText:TextView=findViewById(R.id.tv_category)
+         categoryText=findViewById(R.id.tv_category)
          progressBar = findViewById(R.id.progress_bar)
-        categoryText.text=categoryName
-        initializeRecyclerView(categoryName)
+
 
 
     }
@@ -68,6 +68,9 @@ class ProductActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
+        val categoryName=intent.getStringExtra("CATEGORY_NAME") ?:""
+        categoryText.text=categoryName
+        initializeRecyclerView(categoryName)
         adapter?.startListening()
     }
 

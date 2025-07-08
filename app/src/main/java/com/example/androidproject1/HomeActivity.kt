@@ -1,6 +1,7 @@
 package com.example.androidproject1
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -28,25 +29,31 @@ class HomeActivity : AppCompatActivity() {
             insets
         }
         database=Firebase.database
-        initializeRecyclerView()
+
     }
 
     private fun initializeRecyclerView(){
-        recyclerView=findViewById(R.id.categories_recycler_view)
-        val query = database.reference.child("categories")
+        try{
+            recyclerView=findViewById(R.id.categories_recycler_view)
+            val query = database.reference.child("categories")
 
-        val options = FirebaseRecyclerOptions.Builder<Category>()
-            .setQuery(query, Category::class.java)
-            .build()
+            val options = FirebaseRecyclerOptions.Builder<Category>()
+                .setQuery(query, Category::class.java)
+                .build()
 
-        adapter=CategoryAdapter(options)
+            adapter=CategoryAdapter(options)
 
-        recyclerView.layoutManager=LinearLayoutManager(this)
-        recyclerView.adapter=adapter
+            recyclerView.layoutManager=LinearLayoutManager(this)
+            recyclerView.adapter=adapter
+        }catch (e:Exception){
+            Log.i("TAG", "initializeRecyclerView: $e")
+        }
+
     }
 
     override fun onStart() {
         super.onStart()
+        initializeRecyclerView()
         adapter?.startListening()
     }
 

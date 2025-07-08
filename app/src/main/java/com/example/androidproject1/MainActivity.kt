@@ -23,7 +23,7 @@ class MainActivity : AppCompatActivity() {
 
         val button:ConstraintLayout=findViewById(R.id.cl_started_button)
         button.setOnClickListener {
-            val intent:Intent=Intent(this,HomeActivity::class.java)
+            val intent =Intent(this,HomeActivity::class.java)
             startActivity(intent)
         }
     }
