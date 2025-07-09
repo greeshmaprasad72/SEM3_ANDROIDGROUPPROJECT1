@@ -3,12 +3,14 @@ package com.example.androidproject1.adapter
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.androidproject1.R
 import com.example.androidproject1.model.Product
 import com.example.androidproject1.product.ProductDetailActivity
@@ -37,6 +39,7 @@ class ProductAdapter(options: FirebaseRecyclerOptions<Product>,private val categ
     }
 
     override fun onBindViewHolder(holder: ProductViewHolder, position: Int, model: Product) {
+        Log.d("TAG", "onBindViewHolder: "+model.name)
         holder.productName.text = model.name
         holder.productPrice.text = "$${model.price}"
 
@@ -46,11 +49,24 @@ class ProductAdapter(options: FirebaseRecyclerOptions<Product>,private val categ
 
 
             val storageRef: StorageReference = FirebaseStorage.getInstance().getReferenceFromUrl(model.image)
-            Glide.with(holder.productImage.context)
-                .load(storageRef)
-                .placeholder(R.drawable.dewss)
-                .error(R.drawable.dewss)
-                .into(holder.productImage)
+        storageRef.downloadUrl
+            .addOnSuccessListener { uri ->
+                Log.d("TAG", "Got download URL: $uri")
+
+                Glide.with(holder.productImage.context)
+                    .load(uri.toString())
+                    .placeholder(R.drawable.dewss)
+                    .error(R.drawable.dewss)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .centerCrop()
+                    .into(holder.productImage)
+            }
+            .addOnFailureListener { exception ->
+                Log.e("TAG", "Failed to get download URL: ${exception.message}")
+
+                // Method 2: Try loading directly with StorageReference
+//                loadWithStorageReference(imageUrl, imageView)
+            }
 
 
 

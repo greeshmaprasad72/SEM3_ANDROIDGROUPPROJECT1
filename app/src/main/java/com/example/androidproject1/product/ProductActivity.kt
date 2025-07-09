@@ -3,25 +3,40 @@ package com.example.androidproject1.product
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.GravityCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.androidproject1.R
 import com.example.androidproject1.adapter.ProductAdapter
+import com.example.androidproject1.adapter.CategoryAdapter
+import com.example.androidproject1.adapter.CategoryDrawerAdapter
 import com.example.androidproject1.model.Product
+import com.example.androidproject1.model.Category
 import com.firebase.ui.database.FirebaseRecyclerOptions
 import com.google.firebase.database.FirebaseDatabase
 
 class ProductActivity : AppCompatActivity() {
-    private lateinit var recyclerView:RecyclerView
-    private var adapter:ProductAdapter?=null
-    private lateinit var  progressBar:ProgressBar
-    private lateinit var categoryText:TextView
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var categoryRecyclerView: RecyclerView
+    private var productAdapter: ProductAdapter? = null
+    private var categoryAdapter: CategoryDrawerAdapter? = null
+    private lateinit var progressBar: ProgressBar
+    private lateinit var categoryText: TextView
+    private lateinit var drawerLayout: DrawerLayout
+    private lateinit var hamburgerIcon: ImageView
+    private lateinit var toolbarTitle: TextView
+
+    private var currentCategoryName: String = ""
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -32,19 +47,69 @@ class ProductActivity : AppCompatActivity() {
             insets
         }
 
-
-        recyclerView=findViewById(R.id.rv_product)
-         categoryText=findViewById(R.id.tv_category)
-         progressBar = findViewById(R.id.progress_bar)
-
-
-
+        initializeViews()
+        setupDrawer()
+        setupCategoryRecyclerView()
     }
 
-    private fun initializeRecyclerView(categoryName:String) {
-        try{
+    private fun initializeViews() {
+        recyclerView = findViewById(R.id.rv_product)
+        categoryRecyclerView = findViewById(R.id.recyclerview_category)
+        categoryText = findViewById(R.id.tv_category)
+        progressBar = findViewById(R.id.progress_bar)
+        drawerLayout = findViewById(R.id.drawer_layout)
+        hamburgerIcon = findViewById(R.id.im_arrow_back)
+        toolbarTitle = findViewById(R.id.textview_label)
+    }
+
+    private fun setupDrawer() {
+        hamburgerIcon.setOnClickListener {
+            if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+                drawerLayout.closeDrawer(GravityCompat.START)
+            } else {
+                drawerLayout.openDrawer(GravityCompat.START)
+            }
+        }
+    }
+
+    private fun setupCategoryRecyclerView() {
+        try {
+            val query = FirebaseDatabase.getInstance()
+                .getReference("categories")
+
+            val options = FirebaseRecyclerOptions.Builder<Category>()
+                .setQuery(query, Category::class.java)
+                .build()
+
+            categoryAdapter = CategoryDrawerAdapter(options) { selectedCategory ->
+                // Handle category selection
+                currentCategoryName = selectedCategory.name
+                toolbarTitle.text = selectedCategory.name
+                categoryText.text = selectedCategory.name
+
+                // Update product list based on selected category
+                initializeProductRecyclerView(selectedCategory.name)
+
+                // Close drawer after selection
+                drawerLayout.closeDrawer(GravityCompat.START)
+            }
+
+            categoryRecyclerView.layoutManager = LinearLayoutManager(this)
+            categoryRecyclerView.adapter = categoryAdapter
+
+        } catch (e: Exception) {
+            Log.d("TAG", "setupCategoryRecyclerView: $e")
+        }
+    }
+
+    private fun initializeProductRecyclerView(categoryName: String) {
+        try {
             progressBar.visibility = View.VISIBLE
             recyclerView.visibility = View.GONE
+
+            // Stop previous adapter if exists
+            productAdapter?.stopListening()
+
             val query = FirebaseDatabase.getInstance()
                 .getReference("categories")
                 .child(categoryName)
@@ -53,29 +118,46 @@ class ProductActivity : AppCompatActivity() {
             val options = FirebaseRecyclerOptions.Builder<Product>()
                 .setQuery(query, Product::class.java)
                 .build()
-            adapter = ProductAdapter(options,categoryName)
 
-            recyclerView.layoutManager = GridLayoutManager(this,2)
-            recyclerView.adapter = adapter
+            productAdapter = ProductAdapter(options, categoryName)
+            recyclerView.layoutManager = GridLayoutManager(this, 2)
+            recyclerView.adapter = productAdapter
+
+            // Start listening for new adapter
+            productAdapter?.startListening()
 
             progressBar.visibility = View.GONE
             recyclerView.visibility = View.VISIBLE
-        }catch (e:Exception){
-            Log.d("TAG", "initializeRecyclerView: $e")
-        }
 
+        } catch (e: Exception) {
+            Log.d("TAG", "initializeProductRecyclerView: $e")
+        }
     }
 
     override fun onStart() {
         super.onStart()
-        val categoryName=intent.getStringExtra("CATEGORY_NAME") ?:""
-        categoryText.text=categoryName
-        initializeRecyclerView(categoryName)
-        adapter?.startListening()
+        currentCategoryName = intent.getStringExtra("CATEGORY_NAME") ?: ""
+
+        if (currentCategoryName.isNotEmpty()) {
+            toolbarTitle.text = currentCategoryName
+            categoryText.text = currentCategoryName
+            initializeProductRecyclerView(currentCategoryName)
+        }
+
+        categoryAdapter?.startListening()
     }
 
     override fun onStop() {
         super.onStop()
-        adapter?.stopListening()
+        productAdapter?.stopListening()
+        categoryAdapter?.stopListening()
+    }
+
+    override fun onBackPressed() {
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            drawerLayout.closeDrawer(GravityCompat.START)
+        } else {
+            super.onBackPressed()
+        }
     }
 }

@@ -32,6 +32,8 @@ class CategoryAdapter(options: FirebaseRecyclerOptions<Category>) :FirebaseRecyc
     override fun onBindViewHolder(holder: CategoryViewHolder, position: Int, model: Category) {
         holder.categoryName.text=model.name
         val storRef: StorageReference = FirebaseStorage.getInstance().getReferenceFromUrl(model.image)
+
+
         Glide.with(holder.categoryImage.context).load(storRef).into(holder.categoryImage)
         holder.clCategory.setOnClickListener {
             val intent =Intent(holder.itemView.context,ProductActivity::class.java)
