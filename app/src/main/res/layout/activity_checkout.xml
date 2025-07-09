@@ -111,7 +111,7 @@
                 android:layout_margin="10dp"
                 android:background="@drawable/rounded_edittext"
                
-                android:hint="Enter first Name"
+                android:hint="Enter last Name"
                 android:padding="15dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -123,7 +123,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                
-                android:text="Last name"
+                android:text="Email"
                 android:textSize="14sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -205,18 +205,6 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/textview_billing_address" />
 
-                    <EditText
-                        android:id="@+id/edittext_zipCode"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="10dp"
-                        android:background="@drawable/rounded_edittext"
-                       
-                        android:hint="Enter address"
-                        android:padding="15dp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/textview_address" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -258,7 +246,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                
-                android:text="Address"
+                android:text="Landmark"
                 android:textSize="14sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -277,6 +265,21 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/textview_country" />
+
+            <EditText
+                android:id="@+id/edittext_zipCode"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:layout_marginTop="4dp"
+
+                android:background="@drawable/rounded_edittext"
+                android:hint="Enter address"
+                android:padding="15dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.071"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/textview_address" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
