@@ -12,6 +12,10 @@ android {
     namespace = "com.example.androidproject1"
     compileSdk = 35
 
+    buildFeatures {
+        viewBinding =true
+    }
+
     defaultConfig {
         applicationId = "com.example.androidproject1"
         minSdk = 27
@@ -30,7 +34,11 @@ android {
                 "proguard-rules.pro"
             )
         }
+
     }
+
+
+
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11

@@ -15,7 +15,7 @@
     <string name="country">Country</string>
     <string name="card_holder_name">Card Holder Name</string>
     <string name="order_places_successfully">Order Places Successfully</string>
-    <string name="thank_you_for_yoour_order_we_will_devliver_your_order_shortley">Thank you for yoour order! We will devliver your order shortley</string>
+    <string name="thank_you_for_your_order_we_will_deliver_your_order_shortly">Thank you for your order! We will deliver your order shortly</string>
     <string name="back_to_home">Back To Home</string>
     <string name="grocery_plus">Grocery Plus</string>
     <string name="signup">Signup</string>
@@ -32,7 +32,7 @@
     <string name="categories">Categories</string>
     <string name="send_receipt">Share Receipt</string>
     <string name="order_placed_successfully">Order Placed Successfully</string>
-    <string name="thank_you_for_yoour_order_we_will_devliver_your_order_shortley_">Thank you for yoour order! We will devliver your order shortley.</string>
+    <string name="thank_you_for_your_order_we_will_deliver_your_order_shortly_">Thank you for your order! We will deliver your order shortly.</string>
     <string name="total_10_00">Total: $10.00</string>
     <string name="_10_00">$10.00</string>
     <string name="qty_1">Qty: 1</string>
@@ -55,4 +55,31 @@
     <string name="email">Email</string>
     <string name="city">City</string>
     <string name="enter_city">Enter city</string>
+    <string name="remove_item">Remove item</string>
+    <string name="Confirm_payment">Confirm Payment</string>
+    <string name="error_loading_confirmation">Error loading confirmation page</string>
+    <string name="error_invalid_order_info">Error: Invalid order information</string>
+    <string name="error_loading_order_confirmation">Error loading order confirmation</string>
+    <string name="error_displaying_order_details">Error displaying order details</string>
+    <string name="order_number">Order #%1$s</string>
+    <string name="payment_method_cash">Payment Method: Cash on Delivery</string>
+    <string name="payment_method_paypal">Payment Method: PayPal</string>
+    <string name="payment_method_card">Payment Method: Credit/Debit Card</string>
+    <string name="payment_note_cash">Please have exact amount ready for delivery</string>
+    <string name="payment_note_paypal">Payment processed successfully via PayPal</string>
+    <string name="payment_note_card">Payment processed successfully</string>
+    <string name="delivery_address_format">%1$s %2$s\n%3$s\n%4$s, %5$s\n%6$s</string>
+    <!-- Card Details Strings -->
+    <string name="error_loading_card_details">Error loading card details page</string>
+    <string name="error_no_internet">No internet connection</string>
+    <string name="error_processing_payment">Error processing payment</string>
+    <string name="error_completing_payment">Error completing payment</string>
+
+    <string name="error_card_name_required">Card holder name required</string>
+    <string name="error_valid_card_number">Valid card number required</string>
+    <string name="error_valid_expiry_date">Valid expiry date required (MM/YY)</string>
+    <string name="error_valid_cvv">Valid CVV required</string>
+
+    <string name="confirm_payment">Confirm Payment</string>
+    <string name="processing">Processing...</string>
 </resources>
