@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.google.gms.google.services)
+    id("com.google.devtools.ksp")
 
 }
 
@@ -58,8 +59,12 @@ dependencies {
     implementation(libs.firebaseui.storage)
 
     // Glide
-    implementation(libs.glide)
+    implementation(libs.github.glide)
+    ksp(libs.glide.ksp)
     implementation(libs.firebase.auth.ktx)
+    implementation(libs.firebaseui.firebase.ui.database)
+
+    implementation(libs.firebaseui.firebase.ui.storage)
 
     // Testing
     testImplementation(libs.junit)

@@ -1,7 +1,7 @@
 [versions]
-agp = "8.11.0"
+agp = "8.8.0"
 firebaseAuthKtxVersion = "23.2.1"
-kotlin = "2.2.0"
+kotlin = "2.0.0"
 coreKtx = "1.16.0"
 junit = "4.13.2"
 junitVersion = "1.2.1"
@@ -15,10 +15,14 @@ firebaseDatabase = "21.0.0"
 firebaseStorage = "20.3.0"
 firebaseUi = "8.0.2"
 glide = "4.16.0"
+githubGlide = "4.16.0"
 firebaseAuthKtx = "23.2.1"
+firebaseUiDatabaseVersion = "8.0.2"
+firebaseUiStorageVersion = "9.0.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+compiler = { module = "com.github.bumptech.glide:compiler", version.ref = "glide" }
 firebase-auth-ktx-v2230 = { module = "com.google.firebase:firebase-auth-ktx", version.ref = "firebaseAuthKtxVersion" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
@@ -33,8 +37,10 @@ firebase-storage = { group = "com.google.firebase", name = "firebase-storage-ktx
 
 firebaseui-database = { group = "com.firebaseui", name = "firebase-ui-database", version.ref = "firebaseUi" }
 firebaseui-storage = { group = "com.firebaseui", name = "firebase-ui-storage", version.ref = "firebaseUi" }
-
-glide = { group = "com.github.bumptech.glide", name = "glide", version.ref = "glide" }
+firebaseui-firebase-ui-database = { module = "com.firebaseui:firebase-ui-database", version.ref = "firebaseUiDatabaseVersion" }
+firebaseui-firebase-ui-storage = { module = "com.firebaseui:firebase-ui-storage", version.ref = "firebaseUiStorageVersion" }
+github-glide = { module = "com.github.bumptech.glide:glide", version.ref = "githubGlide" }
+glide-ksp = { module = "com.github.bumptech.glide:ksp", version.ref = "githubGlide" }
 firebase-auth-ktx = { group = "com.google.firebase", name = "firebase-auth-ktx", version.ref = "firebaseAuthKtx" }
 
 
