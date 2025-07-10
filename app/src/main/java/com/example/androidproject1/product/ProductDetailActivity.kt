@@ -136,14 +136,20 @@ class ProductDetailActivity : AppCompatActivity() {
     }
 
     private fun addToCart(){
-        val currentUser = auth.currentUser
-        currentProduct?.let { product ->
-            val userId = currentUser?.uid?:""
+        if (selectedSize.isEmpty()) {
+            Toast.makeText(this, "Please select a size before adding to cart", Toast.LENGTH_SHORT).show()
+
+        }else{
+            val currentUser = auth.currentUser
+            currentProduct?.let { product ->
+                val userId = currentUser?.uid?:""
 
 
 
-            checkExistingCartItem(userId, product)
+                checkExistingCartItem(userId, product)
+            }
         }
+
     }
 
     private fun checkExistingCartItem(userId: String, product: Product) {

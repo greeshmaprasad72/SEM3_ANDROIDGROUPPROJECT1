@@ -36,9 +36,9 @@ class CartActivity : AppCompatActivity() {
     private lateinit var cartAdapter: CartAdapter
     private var cartItems = mutableListOf<CartItem>()
     var subTotal = 0.0
-    var deliveryFee=0.0
-    var taxAmount=0.0
-    var totalAmount=0.0
+    private var deliveryFee=0.0
+    private var taxAmount=0.0
+    private var totalAmount=0.0
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -53,6 +53,7 @@ class CartActivity : AppCompatActivity() {
         setupRecyclerView()
         setupClickListeners()
         loadCartItems()
+        clearFields()
     }
 
     private fun initViews() {
@@ -157,6 +158,12 @@ class CartActivity : AppCompatActivity() {
             cartAdapter.notifyDataSetChanged()
         }
     }
+    private fun clearFields(){
+        tvSubTotal.text = "\$ 0.0"
+        tvDeliveryFee.text = "\$ 0.0"
+        tvTax.text = "\$ 0.0"
+        tvTotal.text = "\$ 0.0"
+    }
 
     private fun showEmptyCart() {
         rvCart.visibility = View.GONE
@@ -174,6 +181,7 @@ class CartActivity : AppCompatActivity() {
             cartItem.key?.let { itemKey ->
                 database.getReference("cart").child(user.uid).child(itemKey).removeValue()
                     .addOnSuccessListener {
+                        clearFields()
                         Toast.makeText(this, "Item removed from cart", Toast.LENGTH_SHORT).show()
                     }
                     .addOnFailureListener { e ->
