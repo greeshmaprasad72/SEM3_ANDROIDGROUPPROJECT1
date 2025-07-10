@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.androidproject1.databinding.ActivityCheckoutBinding
 import com.google.firebase.auth.FirebaseAuth
@@ -36,7 +37,10 @@ class CheckoutActivity : AppCompatActivity() {
     }
 
     private fun setupViews() {
-        binding.imageviewBackArrow.setOnClickListener { finish() }
+        binding.imageviewBackArrow.setOnClickListener {
+            Toast.makeText(this, "Back clicked", Toast.LENGTH_SHORT).show()
+            onBackPressedDispatcher.onBackPressed()
+        }
 
         // Pre-fill user email if available
         FirebaseAuth.getInstance().currentUser?.email?.let { email ->
@@ -71,18 +75,21 @@ class CheckoutActivity : AppCompatActivity() {
                 return false
             }
             if (edittextPostalCode.text.isNullOrEmpty()) {
-                edittextPostalCode.error = "Zip code required"
+                edittextPostalCode.error = "Postal code required"
                 return false
             }
-            if(!isValidCanadianPostalCode(edittextPostalCode.text.toString())){
-                edittextPostalCode.error = "Invalid postal code"
+            if (!isValidCanadianPostalCode(edittextPostalCode.text.toString())) {
+                edittextPostalCode.error = "Invalid postal code (format: A1A 1A1)"
                 return false
             }
             if (edittextCity.text.isNullOrEmpty()) {
                 edittextCity.error = "City required"
                 return false
             }
-
+            if (edittextCountry.text.isNullOrEmpty()) {
+                edittextCountry.error = "Country required"
+                return false
+            }
         }
         return true
     }
@@ -93,7 +100,7 @@ class CheckoutActivity : AppCompatActivity() {
             lastName = binding.edittextLastName.text.toString(),
             email = binding.edittextEmail.text.toString(),
             address = binding.edittextAddress.text.toString(),
-            zipCode = binding.edittextAddress.text.toString(),
+            zipCode = binding.edittextPostalCode.text.toString(),
             city = binding.edittextCity.text.toString(),
             country = binding.edittextCountry.text.toString(),
             totalAmount = totalAmount
@@ -104,22 +111,19 @@ class CheckoutActivity : AppCompatActivity() {
         }
         startActivity(intent)
     }
-    private fun isValidCanadianPostalCode(postalcode: String): Boolean {
-        val pattern = "^[A-Z][0-9][A-Z]\\s[0-9][A-Z][0-9]$"
-        return postalcode.matches(pattern.toRegex())
+
+    private fun isValidCanadianPostalCode(postalCode: String): Boolean {
+        val pattern = "^[A-Za-z]\\d[A-Za-z][ ]?\\d[A-Za-z]\\d$".toRegex(RegexOption.IGNORE_CASE)
+        return pattern.matches(postalCode)
     }
+
     private fun validatePostalCode() {
         with(binding) {
             edittextPostalCode.addTextChangedListener(object : TextWatcher {
                 private var isUpdating = false
                 private var previousText = ""
 
-                override fun beforeTextChanged(
-                    s: CharSequence,
-                    start: Int,
-                    count: Int,
-                    after: Int
-                ) {
+                override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
                     previousText = s.toString()
                 }
 
@@ -159,7 +163,7 @@ class CheckoutActivity : AppCompatActivity() {
     data class BillingDetails(
         val firstName: String = "",
         val lastName: String = "",
-        val email: String ="",
+        val email: String = "",
         val address: String = "",
         val city: String = "",
         val zipCode: String = "",

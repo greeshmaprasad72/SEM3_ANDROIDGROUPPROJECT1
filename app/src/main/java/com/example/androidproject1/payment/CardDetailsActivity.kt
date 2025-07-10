@@ -47,8 +47,8 @@ class CardDetailsActivity : AppCompatActivity() {
 
     private fun setupViews() {
         binding.imageviewBackArrow.setOnClickListener {
-            Log.d("CardDetailsActivity", "Back button clicked")
-            finish()
+            Toast.makeText(this, "Back clicked", Toast.LENGTH_SHORT).show()
+            onBackPressedDispatcher.onBackPressed()
         }
 
         // Display total amount

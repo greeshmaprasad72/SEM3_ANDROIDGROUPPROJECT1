@@ -1,69 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".payment.CheckoutActivity">
-<ScrollView
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintEnd_toEndOf="parent"
-    android:layout_marginBottom="30dp"
-    >
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/cl_main"
+        android:id="@+id/cl_toolbar"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".payment.CheckoutActivity">
+        android:layout_height="56dp"
+        android:layout_margin="10dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/cl_toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:orientation="horizontal"
-            android:layout_margin="10dp"
-            app:layout_constraintEnd_toEndOf="parent"
+        <ImageView
+            android:id="@+id/imageview_back_arrow"
+            android:layout_width="34dp"
+            android:layout_height="34dp"
+            android:layout_gravity="center_vertical"
+            android:layout_margin="5dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:contentDescription="Back button"
+            android:src="@drawable/baseline_arrow_back_24"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toTopOf="parent" />
 
-            <ImageView
-                android:id="@+id/imageview_back_arrow"
-                android:layout_width="34dp"
-                android:layout_height="34dp"
-                android:layout_gravity="center_vertical"
-                android:layout_margin="5dp"
-                android:src="@drawable/baseline_arrow_back_24"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+        <TextView
+            android:id="@+id/textview_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="10dp"
+            android:gravity="center_vertical"
+            android:text="Checkout Screen"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/imageview_back_arrow"
+            app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
-                android:id="@+id/textview_label"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:gravity="center_vertical"
-                android:text="Checkout Screen"
-                android:textColor="@color/black"
-                android:textSize="18sp"
-                android:layout_margin="10dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@id/imageview_back_arrow"
-                app:layout_constraintTop_toTopOf="parent" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@id/button_proceed_to_payment"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cl_toolbar">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/cl_toolbar">
+            android:layout_height="wrap_content">
 
-            <!-- Personal Details section -->
             <TextView
                 android:id="@+id/textview_personal_details"
                 android:layout_width="match_parent"
@@ -92,7 +87,8 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:background="@drawable/rounded_edittext"
-                android:hint="Enter first Name"
+                android:hint="Enter first name"
+                android:inputType="textPersonName"
                 android:padding="15dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -115,7 +111,8 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:background="@drawable/rounded_edittext"
-                android:hint="Enter last Name"
+                android:hint="Enter last name"
+                android:inputType="textPersonName"
                 android:padding="15dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -139,12 +136,12 @@
                 android:layout_margin="10dp"
                 android:background="@drawable/rounded_edittext"
                 android:hint="Enter email"
+                android:inputType="textEmailAddress"
                 android:padding="15dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/textview_label_email" />
 
-            <!-- Billing Address section -->
             <TextView
                 android:id="@+id/textview_billing_address"
                 android:layout_width="match_parent"
@@ -173,7 +170,8 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:background="@drawable/rounded_edittext"
-                android:hint="Enter address"
+                android:hint="Enter street address"
+                android:inputType="textPostalAddress"
                 android:padding="15dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -183,6 +181,7 @@
                 android:id="@+id/ll_zipcode_city"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:orientation="horizontal"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/edittext_address">
@@ -197,21 +196,23 @@
                         android:id="@+id/textview_zipcode"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_margin="10dp"
-                        android:text="Zip Code"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:text="Postal Code"
                         android:textSize="14sp" />
 
                     <EditText
                         android:id="@+id/edittext_postal_code"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_margin="5dp"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginBottom="10dp"
                         android:background="@drawable/rounded_edittext"
-                        android:hint="@string/postal_code"
-                        android:maxLength="7"
+                        android:hint="A1A 1A1"
                         android:inputType="textPostalAddress"
-                        android:padding="15dp"
-                        android:imeOptions="actionNext" />
+                        android:padding="15dp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -224,7 +225,9 @@
                         android:id="@+id/textview_city"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_margin="10dp"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginEnd="10dp"
                         android:text="City"
                         android:textSize="14sp" />
 
@@ -232,9 +235,12 @@
                         android:id="@+id/edittext_city"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_margin="10dp"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginBottom="10dp"
                         android:background="@drawable/rounded_edittext"
-                        android:hint="City"
+                        android:hint="Enter city"
+                        android:inputType="textPostalAddress"
                         android:padding="15dp" />
                 </LinearLayout>
             </LinearLayout>
@@ -243,8 +249,10 @@
                 android:id="@+id/textview_country"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:text="Landmark(Optional)"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
+                android:text="Country"
                 android:textSize="14sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -254,27 +262,30 @@
                 android:id="@+id/edittext_country"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:background="@drawable/rounded_edittext"
-                android:hint="Enter Landmark"
-                android:padding="15dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="10dp"
                 android:layout_marginBottom="20dp"
+                android:background="@drawable/rounded_edittext"
+                android:hint="Enter country"
+                android:inputType="textPostalAddress"
+                android:padding="15dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/textview_country" />
 
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/button_proceed_to_payment"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="20dp"
-                android:background="@drawable/rounded_button"
-                android:text="Proceed To Payment"
-                android:textColor="@color/white"
-                app:layout_constraintTop_toBottomOf="@id/edittext_country"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</ScrollView>
+    </ScrollView>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/button_proceed_to_payment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:background="@drawable/rounded_button"
+        android:text="Proceed To Payment"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -46,8 +46,8 @@ class PaymentActivity : AppCompatActivity() {
 
     private fun setupViews() {
         binding.imageviewBackArrow.setOnClickListener {
-            Log.d("PaymentActivity", "Back arrow clicked")
-            finish()
+            Toast.makeText(this, "Back clicked", Toast.LENGTH_SHORT).show()
+            onBackPressedDispatcher.onBackPressed()
         }
     }
 

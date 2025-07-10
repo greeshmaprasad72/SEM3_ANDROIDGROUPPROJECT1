@@ -77,8 +77,10 @@ class CartActivity : AppCompatActivity() {
 
     private fun setupClickListeners() {
         backArrow.setOnClickListener {
-            finish()
+            Toast.makeText(this, "Back clicked", Toast.LENGTH_SHORT).show()
+            onBackPressedDispatcher.onBackPressed()
         }
+
 
         btnStartShopping.setOnClickListener {
             finish()
