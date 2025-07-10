@@ -31,15 +31,36 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 
-        <ImageView
-            android:id="@+id/cart_icon"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:src="@drawable/cart"
-            android:contentDescription="Shopping cart"
+        <FrameLayout
+            android:id="@+id/fl_cart_container"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_margin="20dp"
+            android:focusable="true"
+            android:clipToPadding="false"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="end"
+                android:src="@drawable/cart"/>
+
+            <TextView
+                android:id="@+id/tv_cart_badge"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_gravity="end|top"
+                android:background="@drawable/cart_background"
+                android:gravity="center"
+                android:textColor="@android:color/white"
+                android:text="0"
+                android:visibility="gone"
+                android:textSize="10sp"/>
+        </FrameLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

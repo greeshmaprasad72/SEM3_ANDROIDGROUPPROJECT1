@@ -33,28 +33,33 @@ class CategoryDrawerAdapter(
     }
 
     override fun onBindViewHolder(holder: CategoryViewHolder, position: Int, model: Category) {
-        holder.categoryName.text = model.name
-        val storageRef: StorageReference = FirebaseStorage.getInstance().getReferenceFromUrl(model.image)
-        storageRef.downloadUrl
-            .addOnSuccessListener { uri ->
-                Log.d("TAG", "Got download URL: $uri")
+        try{
+            holder.categoryName.text = model.name
+            val storageRef: StorageReference = FirebaseStorage.getInstance().getReferenceFromUrl(model.image)
+            storageRef.downloadUrl
+                .addOnSuccessListener { uri ->
+                    Log.d("TAG", "Got download URL: $uri")
 
-                Glide.with(holder.imCatImage.context)
-                    .load(uri.toString())
-                    .placeholder(R.drawable.dewss)
-                    .error(R.drawable.dewss)
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)
-                    .centerCrop()
-                    .into(holder.imCatImage)
-            }
-            .addOnFailureListener { exception ->
-                Log.e("TAG", "Failed to get download URL: ${exception.message}")
+                    Glide.with(holder.imCatImage.context)
+                        .load(uri.toString())
+                        .placeholder(R.drawable.dewss)
+                        .error(R.drawable.dewss)
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .centerCrop()
+                        .into(holder.imCatImage)
+                }
+                .addOnFailureListener { exception ->
+                    Log.e("TAG", "Failed to get download URL: ${exception.message}")
 
-                // Method 2: Try loading directly with StorageReference
+                    // Method 2: Try loading directly with StorageReference
 //                loadWithStorageReference(imageUrl, imageView)
+                }
+            holder.itemView.setOnClickListener {
+                onCategoryClick(model)
             }
-        holder.itemView.setOnClickListener {
-            onCategoryClick(model)
+        }catch (e:Exception){
+            Log.i("TAG", "onBindViewHolder: $e")
         }
+
     }
 }

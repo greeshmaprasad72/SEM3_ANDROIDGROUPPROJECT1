@@ -11,7 +11,9 @@ import com.example.androidproject1.databinding.ActivityOrderConfirmationBinding
 import com.example.androidproject1.product.ProductActivity
 import com.example.androidproject1.LoginActivity
 import com.example.androidproject1.MainActivity
+import com.example.androidproject1.cart.CartDataHolder
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.FirebaseDatabase
 import java.text.NumberFormat
 import java.util.*
 
@@ -19,6 +21,7 @@ class OrderConfirmationActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityOrderConfirmationBinding
     private val auth = FirebaseAuth.getInstance()
+    private val database = FirebaseDatabase.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,7 +66,7 @@ class OrderConfirmationActivity : AppCompatActivity() {
             val currencyFormat = NumberFormat.getCurrencyInstance(Locale.getDefault())
 
             binding.tvOrderNumber.text = getString(R.string.order_number, orderNumber)
-            binding.tvOrderTotal.text = currencyFormat.format(orderTotal)
+
 
             when (paymentMethod.trim().lowercase(Locale.ROOT)) {
                 "cash" -> {
@@ -93,7 +96,14 @@ class OrderConfirmationActivity : AppCompatActivity() {
                 billingDetails.zipCode,
                 billingDetails.country
             )
-
+            val subTotal = CartDataHolder.subTotal
+            val taxAmount = CartDataHolder.taxAmount
+            val deliveryFee = CartDataHolder.deliveryFee
+            val totalAmount=CartDataHolder.totalAmount
+            binding.tvOrderTotal.text ="$${"%.2f".format(subTotal)}"
+            binding.tvDeliveryFee.text="$${"%.2f".format(deliveryFee)}"
+            binding.tvTax.text="$${"%.2f".format(taxAmount)}"
+            binding.tvTotalAmount.text="$${"%.2f".format(totalAmount)}"
             binding.btnContinueShopping.setOnClickListener {
                 Log.d("OrderConfirmation", "Continue shopping clicked")
                 navigateToProducts()
@@ -127,6 +137,8 @@ class OrderConfirmationActivity : AppCompatActivity() {
                 navigateToLogin()
                 return
             }
+            CartDataHolder.clear()
+            clearFirebaseCart(user.uid)
 
             val intent = Intent(this, ProductActivity::class.java).apply {
                 flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
@@ -140,6 +152,16 @@ class OrderConfirmationActivity : AppCompatActivity() {
             Toast.makeText(this, "Could not open products page", Toast.LENGTH_SHORT).show()
             navigateToHome()
         }
+    }
+    private fun clearFirebaseCart(userId: String) {
+        val cartRef = database.getReference("cart").child(userId)
+        cartRef.removeValue()
+            .addOnSuccessListener {
+                Log.d("OrderConfirmation", "Firebase cart cleared successfully")
+            }
+            .addOnFailureListener { exception ->
+                Log.e("OrderConfirmation", "Failed to clear Firebase cart", exception)
+            }
     }
 
     private fun navigateToLogin() {

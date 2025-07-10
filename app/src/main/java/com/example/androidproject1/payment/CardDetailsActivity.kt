@@ -36,6 +36,7 @@ class CardDetailsActivity : AppCompatActivity() {
             setupViews()
             setupClickListeners()
             setupTextWatchers()
+            validateExpiryDate()
 
         } catch (e: Exception) {
             Log.e("CardDetailsActivity", "Error initializing activity: ${e.message}")
@@ -52,7 +53,7 @@ class CardDetailsActivity : AppCompatActivity() {
 
         // Display total amount
         val currencyFormat = NumberFormat.getCurrencyInstance(Locale.getDefault())
-        binding.textviewLabel.text = "Pay ${currencyFormat.format(billingDetails.totalAmount)}"
+        binding.textviewLabel.text = "CardDetailsScreen"
     }
 
     private fun setupClickListeners() {
@@ -66,7 +67,7 @@ class CardDetailsActivity : AppCompatActivity() {
 
     private fun setupTextWatchers() {
         binding.edittextCardNumber.addTextChangedListener(createCardNumberTextWatcher())
-        binding.edittextExpiryDate.addTextChangedListener(createExpiryDateTextWatcher())
+//        binding.edittextExpiryDate.addTextChangedListener(createExpiryDateTextWatcher())
     }
 
     private fun createCardNumberTextWatcher(): TextWatcher {
@@ -93,23 +94,47 @@ class CardDetailsActivity : AppCompatActivity() {
         }
     }
 
-    private fun createExpiryDateTextWatcher(): TextWatcher {
-        return object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+    private fun validateExpiryDate() {
+        binding.edittextExpiryDate.addTextChangedListener(object : TextWatcher {
+            private var isDeleting = false
 
-            override fun afterTextChanged(s: Editable?) {
-                s?.let {
-                    if (it.length == 2 && !it.toString().contains("/")) {
-                        binding.edittextExpiryDate.removeTextChangedListener(this)
-                        binding.edittextExpiryDate.setText("$it/")
-                        binding.edittextExpiryDate.setSelection(3)
-                        binding.edittextExpiryDate.addTextChangedListener(this)
-                    }
+            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
+                isDeleting = count > after
+            }
+
+            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
+
+            override fun afterTextChanged(s: Editable) {
+                val input = s.toString()
+                if (isDeleting) {
+                    return
+                }
+
+                if (input.length == 2 && !input.contains("/")) {
+                    binding.edittextExpiryDate.setText("$input/")
+                    binding.edittextExpiryDate.setSelection( binding.edittextExpiryDate.getText().length)
                 }
             }
-        }
+        })
     }
+
+//    private fun createExpiryDateTextWatcher(): TextWatcher {
+//        return object : TextWatcher {
+//            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+//            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+//
+//            override fun afterTextChanged(s: Editable?) {
+//                s?.let {
+//                    if (it.length == 2 && !it.toString().contains("/")) {
+//                        binding.edittextExpiryDate.removeTextChangedListener(this)
+//                        binding.edittextExpiryDate.setText("$it/")
+//                        binding.edittextExpiryDate.setSelection(3)
+//                        binding.edittextExpiryDate.addTextChangedListener(this)
+//                    }
+//                }
+//            }
+//        }
+//    }
 
     private fun validateCardDetails(): Boolean {
         with(binding) {
@@ -130,8 +155,8 @@ class CardDetailsActivity : AppCompatActivity() {
 
             // Expiry Date Validation (MM/YY format)
             val expiryDate = edittextExpiryDate.text.toString()
-            if (!isValidExpiryDate(expiryDate)) {
-                edittextExpiryDate.error = "Valid MM/YY required"
+            if (expiryDate.isNullOrEmpty()) {
+                edittextExpiryDate.error = "Expiry date is required"
                 edittextExpiryDate.requestFocus()
                 return false
             }

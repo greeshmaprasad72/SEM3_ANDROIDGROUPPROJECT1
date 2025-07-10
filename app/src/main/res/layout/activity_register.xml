@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/dewss"
+    android:background="@drawable/dress_bg"
     android:padding="16dp">
 
     <TextView
@@ -14,7 +14,7 @@
         android:text="Create Account"
         android:textSize="24sp"
         android:textStyle="bold"
-        android:textColor="@color/black"
+        android:textColor="@color/white"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -27,7 +27,7 @@
         android:layout_height="wrap_content"
         android:text="Join us and enjoy shopping!"
         android:textSize="14sp"
-        android:textColor="@color/black"
+        android:textColor="#D0D0D0"
         app:layout_constraintTop_toBottomOf="@id/tv_register_title"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -141,6 +141,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text=" Login"
+            android:textStyle="bold"
             android:textColor="@color/colorPrimary"
             android:textSize="14sp"
             />

@@ -1,66 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".payment.CheckoutActivity">
+<ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    android:layout_marginBottom="30dp"
+    >
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/cl_toolbar"
+        android:id="@+id/cl_main"
         android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:orientation="horizontal"
-        android:layout_margin="10dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_height="match_parent"
+        tools:context=".payment.CheckoutActivity">
 
-        <ImageView
-            android:id="@+id/imageview_back_arrow"
-            android:layout_width="34dp"
-            android:layout_height="34dp"
-            android:layout_gravity="center_vertical"
-            android:layout_margin="5dp"
-            android:src="@drawable/baseline_arrow_back_24"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-
-
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/textview_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-           
-            android:gravity="center_vertical"
-            android:text="Checkout Screen"
-            android:textColor="@color/black"
-            android:textSize="18sp"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:orientation="horizontal"
             android:layout_margin="10dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@id/imageview_back_arrow"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/cl_toolbar">
+            <ImageView
+                android:id="@+id/imageview_back_arrow"
+                android:layout_width="34dp"
+                android:layout_height="34dp"
+                android:layout_gravity="center_vertical"
+                android:layout_margin="5dp"
+                android:src="@drawable/baseline_arrow_back_24"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/textview_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center_vertical"
+                android:text="Checkout Screen"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                android:layout_margin="10dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@id/imageview_back_arrow"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/cl_toolbar">
+
+            <!-- Personal Details section -->
             <TextView
                 android:id="@+id/textview_personal_details"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
-               
                 android:text="Personal Details"
                 android:textSize="24sp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -72,7 +80,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
-               
                 android:text="First name"
                 android:textSize="14sp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -85,7 +92,6 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:background="@drawable/rounded_edittext"
-               
                 android:hint="Enter first Name"
                 android:padding="15dp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -97,7 +103,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
-               
                 android:text="Last name"
                 android:textSize="14sp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -110,7 +115,6 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:background="@drawable/rounded_edittext"
-               
                 android:hint="Enter last Name"
                 android:padding="15dp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -122,7 +126,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
-               
                 android:text="Email"
                 android:textSize="14sp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -135,19 +138,18 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:background="@drawable/rounded_edittext"
-               
                 android:hint="Enter email"
                 android:padding="15dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/textview_label_email" />
 
+            <!-- Billing Address section -->
             <TextView
                 android:id="@+id/textview_billing_address"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
-               
                 android:text="Billing Address"
                 android:textSize="24sp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -159,7 +161,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
-               
                 android:text="Address"
                 android:textSize="14sp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -172,7 +173,6 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:background="@drawable/rounded_edittext"
-               
                 android:hint="Enter address"
                 android:padding="15dp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -198,13 +198,20 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="10dp"
-                       
                         android:text="Zip Code"
-                        android:textSize="14sp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/textview_billing_address" />
+                        android:textSize="14sp" />
 
+                    <EditText
+                        android:id="@+id/edittext_postal_code"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:background="@drawable/rounded_edittext"
+                        android:hint="@string/postal_code"
+                        android:maxLength="7"
+                        android:inputType="textPostalAddress"
+                        android:padding="15dp"
+                        android:imeOptions="actionNext" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -218,12 +225,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="10dp"
-                       
                         android:text="City"
-                        android:textSize="14sp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/textview_billing_address" />
+                        android:textSize="14sp" />
 
                     <EditText
                         android:id="@+id/edittext_city"
@@ -231,22 +234,17 @@
                         android:layout_height="wrap_content"
                         android:layout_margin="10dp"
                         android:background="@drawable/rounded_edittext"
-                       
-                        android:hint="Enter address"
-                        android:padding="15dp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/textview_address" />
+                        android:hint="City"
+                        android:padding="15dp" />
                 </LinearLayout>
-
             </LinearLayout>
+
             <TextView
                 android:id="@+id/textview_country"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
-               
-                android:text="Landmark"
+                android:text="Landmark(Optional)"
                 android:textSize="14sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -258,41 +256,25 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:background="@drawable/rounded_edittext"
-               
-                android:hint="Enter address"
+                android:hint="Enter Landmark"
                 android:padding="15dp"
                 android:layout_marginBottom="20dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/textview_country" />
 
-            <EditText
-                android:id="@+id/edittext_zipCode"
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/button_proceed_to_payment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:layout_marginTop="4dp"
-
-                android:background="@drawable/rounded_edittext"
-                android:hint="Enter address"
-                android:padding="15dp"
+                android:layout_margin="20dp"
+                android:background="@drawable/rounded_button"
+                android:text="Proceed To Payment"
+                android:textColor="@color/white"
+                app:layout_constraintTop_toBottomOf="@id/edittext_country"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.071"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/textview_address" />
-
-
+                app:layout_constraintStart_toStartOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
-    </ScrollView>
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/button_proceed_to_payment"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="20dp"
-        android:background="@drawable/rounded_button"
-        android:text="Proceed To Payment"
-        android:textColor="@color/white"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

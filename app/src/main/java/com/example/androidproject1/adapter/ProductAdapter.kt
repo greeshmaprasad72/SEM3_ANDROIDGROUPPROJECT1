@@ -39,47 +39,52 @@ class ProductAdapter(options: FirebaseRecyclerOptions<Product>,private val categ
     }
 
     override fun onBindViewHolder(holder: ProductViewHolder, position: Int, model: Product) {
-        Log.d("TAG", "onBindViewHolder: "+model.name)
-        holder.productName.text = model.name
-        holder.productPrice.text = "$${model.price}"
+        try {
+            if (position >= 0 && position < itemCount) {
+                Log.d("TAG", "onBindViewHolder: " + model.name)
+                holder.productName.text = model.name
+                holder.productPrice.text = "$${model.price}"
 
 
-        setColorIndicator(holder.colorIndicator, model.color)
+                setColorIndicator(holder.colorIndicator, model.color)
 
 
+                val storageRef: StorageReference =
+                    FirebaseStorage.getInstance().getReferenceFromUrl(model.image)
+                storageRef.downloadUrl
+                    .addOnSuccessListener { uri ->
+                        Log.d("TAG", "Got download URL: $uri")
 
-            val storageRef: StorageReference = FirebaseStorage.getInstance().getReferenceFromUrl(model.image)
-        storageRef.downloadUrl
-            .addOnSuccessListener { uri ->
-                Log.d("TAG", "Got download URL: $uri")
+                        Glide.with(holder.productImage.context)
+                            .load(uri.toString())
+                            .placeholder(R.drawable.dewss)
+                            .error(R.drawable.dewss)
+                            .diskCacheStrategy(DiskCacheStrategy.ALL)
+                            .centerCrop()
+                            .into(holder.productImage)
+                    }
+                    .addOnFailureListener { exception ->
+                        Log.e("TAG", "Failed to get download URL: ${exception.message}")
 
-                Glide.with(holder.productImage.context)
-                    .load(uri.toString())
-                    .placeholder(R.drawable.dewss)
-                    .error(R.drawable.dewss)
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)
-                    .centerCrop()
-                    .into(holder.productImage)
-            }
-            .addOnFailureListener { exception ->
-                Log.e("TAG", "Failed to get download URL: ${exception.message}")
-
-                // Method 2: Try loading directly with StorageReference
+                        // Method 2: Try loading directly with StorageReference
 //                loadWithStorageReference(imageUrl, imageView)
+                    }
+
+
             }
 
 
 
+            holder.itemView.setOnClickListener {
+                val intent = Intent(holder.itemView.context, ProductDetailActivity::class.java)
+                intent.putExtra("CATEGORY_NAME", categoryName)
+                intent.putExtra("PRODUCT_NAME", model.name)
+                intent.putExtra("PRODUCT_ID", model.id)
+                holder.itemView.context.startActivity(intent)
 
-
-
-        holder.itemView.setOnClickListener {
-            val intent=Intent(holder.itemView.context,ProductDetailActivity::class.java)
-           intent. putExtra("CATEGORY_NAME", categoryName )
-            intent.putExtra("PRODUCT_NAME",model.name)
-           intent. putExtra("PRODUCT_ID", model.id)
-            holder.itemView.context.startActivity(intent)
-
+            }
+        }catch (e:Exception){
+            Log.e("TAG", "onBindViewHolder: ", )
         }
     }
 

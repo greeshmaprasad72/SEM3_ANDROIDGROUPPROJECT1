@@ -1,8 +1,10 @@
 package com.example.androidproject1.product
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
@@ -19,10 +21,15 @@ import com.example.androidproject1.R
 import com.example.androidproject1.adapter.ProductAdapter
 import com.example.androidproject1.adapter.CategoryAdapter
 import com.example.androidproject1.adapter.CategoryDrawerAdapter
+import com.example.androidproject1.cart.CartActivity
 import com.example.androidproject1.model.Product
 import com.example.androidproject1.model.Category
 import com.firebase.ui.database.FirebaseRecyclerOptions
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 
 class ProductActivity : AppCompatActivity() {
     private lateinit var recyclerView: RecyclerView
@@ -34,8 +41,12 @@ class ProductActivity : AppCompatActivity() {
     private lateinit var drawerLayout: DrawerLayout
     private lateinit var hamburgerIcon: ImageView
     private lateinit var toolbarTitle: TextView
+    private lateinit var tvCartCount:TextView
+    private lateinit var flCartContainer: FrameLayout
 
     private var currentCategoryName: String = ""
+    private lateinit var auth: FirebaseAuth
+    private var cartListener: ValueEventListener? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,10 +57,11 @@ class ProductActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-
+        auth = FirebaseAuth.getInstance()
         initializeViews()
         setupDrawer()
         setupCategoryRecyclerView()
+        setupCartCount()
     }
 
     private fun initializeViews() {
@@ -60,6 +72,50 @@ class ProductActivity : AppCompatActivity() {
         drawerLayout = findViewById(R.id.drawer_layout)
         hamburgerIcon = findViewById(R.id.im_arrow_back)
         toolbarTitle = findViewById(R.id.textview_label)
+        flCartContainer=findViewById(R.id.fl_cart_container)
+        tvCartCount=findViewById(R.id.tv_cart_badge)
+
+        flCartContainer.setOnClickListener{
+            val intent=Intent(this,CartActivity::class.java)
+            startActivity(intent)
+        }
+
+
+    }
+
+    private fun setupCartCount() {
+        val currentUser = auth.currentUser
+        if (currentUser != null) {
+            val userId = currentUser.uid
+            val cartRef = FirebaseDatabase.getInstance()
+                .getReference("cart")
+                .child(userId)
+
+            cartListener = object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    // Count number of unique products in cart
+                    val productCount = snapshot.childrenCount.toInt()
+
+                    // Update cart count display
+                    updateCartCountDisplay(productCount)
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    Log.e("TAG", "Failed to read cart data: ${error.message}")
+                }
+            }
+
+            cartRef.addValueEventListener(cartListener!!)
+        }
+    }
+
+    private fun updateCartCountDisplay(count: Int) {
+        if (count > 0) {
+            tvCartCount.text = count.toString()
+            tvCartCount.visibility = View.VISIBLE
+        } else {
+            tvCartCount.visibility = View.GONE
+        }
     }
 
     private fun setupDrawer() {
@@ -136,7 +192,7 @@ class ProductActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-        currentCategoryName = intent.getStringExtra("CATEGORY_NAME") ?: ""
+        currentCategoryName = intent.getStringExtra("CATEGORY_NAME") ?: "Activewear"
 
         if (currentCategoryName.isNotEmpty()) {
             toolbarTitle.text = currentCategoryName
@@ -149,8 +205,8 @@ class ProductActivity : AppCompatActivity() {
 
     override fun onStop() {
         super.onStop()
-        productAdapter?.stopListening()
-        categoryAdapter?.stopListening()
+//        productAdapter?.stopListening()
+//        categoryAdapter?.stopListening()
     }
 
     override fun onBackPressed() {

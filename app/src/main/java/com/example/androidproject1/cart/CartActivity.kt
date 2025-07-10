@@ -35,6 +35,11 @@ class CartActivity : AppCompatActivity() {
     private lateinit var database: FirebaseDatabase
     private lateinit var cartAdapter: CartAdapter
     private var cartItems = mutableListOf<CartItem>()
+    var subTotal = 0.0
+    var deliveryFee=0.0
+    var taxAmount=0.0
+    var totalAmount=0.0
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -79,6 +84,11 @@ class CartActivity : AppCompatActivity() {
         }
 
         btnContinue.setOnClickListener {
+
+            CartDataHolder.subTotal = subTotal
+            CartDataHolder.taxAmount = taxAmount
+            CartDataHolder.deliveryFee = deliveryFee
+            CartDataHolder.totalAmount = totalAmount
             val intent = Intent(this, CheckoutActivity::class.java)
             intent.putExtra("TOTAL_AMOUNT", calculateTotalAmount())
             startActivity(intent)
@@ -105,7 +115,7 @@ class CartActivity : AppCompatActivity() {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     cartItems.clear()
 
-                    var subTotal = 0.0
+
 
                     for (itemSnapshot in snapshot.children) {
                         val cartItem = itemSnapshot.getValue(CartItem::class.java)
@@ -135,13 +145,14 @@ class CartActivity : AppCompatActivity() {
             showCartWithItems()
 
             // Calculate totals
-            val deliveryFee = if (subTotal > 50) 0.0 else 5.0
-            val tax = subTotal * 0.1 // 10% tax
+            deliveryFee = if (subTotal > 50) 0.0 else 5.0
+           taxAmount = subTotal * 0.1 // 10% tax
+            totalAmount=subTotal + deliveryFee + taxAmount
 
             tvSubTotal.text = "$${"%.2f".format(subTotal)}"
             tvDeliveryFee.text = "$${"%.2f".format(deliveryFee)}"
-            tvTax.text = "$${"%.2f".format(tax)}"
-            tvTotal.text = "$${"%.2f".format(subTotal + deliveryFee + tax)}"
+            tvTax.text = "$${"%.2f".format(taxAmount)}"
+            tvTotal.text = "$${"%.2f".format(subTotal + deliveryFee + taxAmount)}"
 
             cartAdapter.notifyDataSetChanged()
         }
@@ -196,5 +207,18 @@ class CartActivity : AppCompatActivity() {
                     }
             }
         }
+    }
+}
+object CartDataHolder {
+    var subTotal: Double = 0.0
+    var taxAmount: Double = 0.0
+    var deliveryFee: Double = 0.0
+    var totalAmount: Double = 0.0
+
+    fun clear() {
+        subTotal = 0.0
+        taxAmount = 0.0
+        deliveryFee = 0.0
+        totalAmount = 0.0
     }
 }
